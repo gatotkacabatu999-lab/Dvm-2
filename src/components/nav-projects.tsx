@@ -1,6 +1,6 @@
 "use client"
 
-import { Settings2 } from "lucide-react"
+import { Cog } from "lucide-react"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -28,7 +28,13 @@ export function NavProjects({
 
   const isSettingsPage = currentPage?.startsWith("settings")
 
-  if (isSearching && !("settings".includes(q) || "font".includes(q) || "colours".includes(q) || "storage".includes(q) || "security".includes(q))) {
+  if (isSearching && !(
+    "settings".includes(q) ||
+    "font".includes(q) ||
+    "colours".includes(q) ||
+    "storage".includes(q) ||
+    "security".includes(q)
+  )) {
     return null
   }
 
@@ -37,13 +43,13 @@ export function NavProjects({
       <SidebarGroupLabel>Settings</SidebarGroupLabel>
       <SidebarMenu>
         <SidebarMenuItem>
-          <SidebarMenuButton
+            <SidebarMenuButton
             tooltip="Settings"
             className="font-medium transition-colors duration-150"
             isActive={isSettingsPage}
             onClick={() => onNavigate?.("settings")}
           >
-            <Settings2 className="theme-accent-amber" />
+            <Cog className="theme-accent-amber" />
             <span>Settings</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
