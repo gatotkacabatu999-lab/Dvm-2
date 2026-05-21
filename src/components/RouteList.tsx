@@ -2258,6 +2258,7 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
   const editInputFs = '11px'
   const editActionFs = btnFs
   const editChipFs = badgeFs
+  const cardSectionBg = isDark ? 'hsl(var(--background)/0.84)' : 'hsl(var(--background)/0.96)'
   const previewRows = cardH >= 520 ? 5 : cardH >= 460 ? 4 : 3
   const hasActiveSearchOrFilter = !!searchQuery.trim() || combinedFilter !== 'all'
 
@@ -2547,7 +2548,7 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
             <div
               onMouseEnter={() => setHoveredRouteId(route.id)}
               onMouseLeave={() => setHoveredRouteId(prev => (prev === route.id ? null : prev))}
-              style={{ width: '100%', maxWidth: cardW, height: cardH, borderRadius: 20, overflow: 'hidden', position: 'relative', background: 'hsl(var(--card) / 0.58)', backdropFilter: 'blur(6px)', WebkitBackdropFilter: 'blur(6px)', border: `${cardBorderWidth}px solid ${cardBorderColor}`, boxShadow: cardShadow, transition: 'border-color 180ms ease, box-shadow 180ms ease, border-width 180ms ease, transform 300ms ease, opacity 300ms ease', animation: `route-card-slide-in 0.4s ease-out ${routeIndex * 0.1}s both`, transform: isCardHovered ? 'scale(1.02)' : 'scale(1)' }}
+              style={{ width: '100%', maxWidth: cardW, height: cardH, borderRadius: 22, overflow: 'hidden', position: 'relative', background: 'hsl(var(--card))', border: `${cardBorderWidth}px solid ${cardBorderColor}`, boxShadow: cardShadow, transition: 'border-color 180ms ease, box-shadow 180ms ease, border-width 180ms ease, transform 300ms ease, opacity 300ms ease', animation: `route-card-slide-in 0.4s ease-out ${routeIndex * 0.1}s both`, transform: isCardHovered ? 'scale(1.02)' : 'scale(1)' }}
             >
               {/* Sliding wrapper */}
               <div style={{ position: 'relative', zIndex: 1, display: 'flex', width: cardW * 3, height: '100%', transform: cardPanel.edit ? `translateX(-${cardW * 2}px)` : cardPanel.info ? `translateX(-${cardW}px)` : 'translateX(0)', transition: 'transform 0.38s cubic-bezier(0.4,0,0.2,1)' }}>
@@ -2561,10 +2562,8 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                       position: 'relative',
                       overflow: 'hidden',
                       flexShrink: 0,
-                      padding: `${cardPadV} ${cardPad} calc(${cardPadV} * 0.9)`,
-                      background: isDark
-                        ? `linear-gradient(180deg, ${markerColor}22 0%, rgba(15, 23, 42, 0.12) 68%, transparent 100%)`
-                        : `linear-gradient(180deg, ${markerColor}1c 0%, rgba(255, 255, 255, 0.46) 68%, transparent 100%)`,
+                      padding: `${cardPadV} ${cardPad} calc(${cardPadV} * 0.85)`,
+                      background: `linear-gradient(135deg, ${markerColor}22, ${markerColor}0a)`,
                       borderBottom: `1px solid ${markerColor}2e`,
                     }}
                   >
@@ -2584,10 +2583,10 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                   </div>
 
                   {/* ── Body ── */}
-                  <div style={{ flex: 1, padding: `${rowGap} ${cardPad} 0`, display: 'flex', flexDirection: 'column', gap: bodyGap, overflow: 'hidden' }}>
+                  <div style={{ flex: 1, padding: `${rowGap} ${cardPad} 0`, display: 'flex', flexDirection: 'column', gap: bodyGap, overflow: 'hidden', background: cardSectionBg }}>
 
                     {/* Pin + stop count moved outside header */}
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.9rem', marginTop: '0.6rem', marginBottom: '0.6rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.9rem', marginTop: '0.65rem', marginBottom: '0.65rem', padding: '0.5rem 0.55rem', borderRadius: 18, background: isDark ? 'hsl(var(--card)/0.55)' : 'hsl(var(--background)/0.88)', border: `1px solid ${markerColor}22` }}>
                       <button
                         onClick={e => { e.stopPropagation(); togglePin(route) }}
                         title={isPinnedCard ? "Unpin from Home" : "Pin to Home"}
@@ -2623,7 +2622,7 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                         const hasCoords = pt.latitude !== 0 || pt.longitude !== 0
                         const km = hasCoords ? haversineKm(kmStartPoint.lat, kmStartPoint.lng, pt.latitude, pt.longitude) : null
                         return (
-                          <div key={pt.code} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: `calc(${cardFontSm} - 1px)`, background: 'hsl(var(--muted)/0.5)', borderRadius: 10, padding: `${rowPadV} ${rowPadH}`, border: '1px solid hsl(var(--border)/0.6)' }}>
+                          <div key={pt.code} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: `calc(${cardFontSm} - 1px)`, background: isDark ? 'hsl(var(--card)/0.4)' : 'hsl(var(--muted)/0.3)', borderRadius: 14, padding: `${rowPadV} ${rowPadH}`, border: `1px solid ${markerColor}18` }}>
                             <span style={{ width: iconSz, height: iconSz, borderRadius: 6, background: `linear-gradient(135deg, ${markerColor}dd, ${markerColor}88)`, color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: iconFs, fontWeight: 800, flexShrink: 0, boxShadow: `0 1px 3px ${markerColor}22` }}>{i + 1}</span>
                             <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, color: 'hsl(var(--foreground))', fontWeight: 600, minWidth: 0 }}>{pt.name}</span>
                             {km !== null && (
@@ -2657,7 +2656,7 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                     )}
 
                     {/* Divider + delivery type badges */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.55rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', marginTop: '0.55rem', padding: '0.55rem 0', borderTop: `1px solid ${markerColor}1f` }}>
                     {getRouteDeliveryPoints(route).length > 0 && (
                       <div style={{ height: 1, background: 'hsl(var(--border)/0.5)' }} />
                     )}
@@ -2674,16 +2673,11 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                           {Object.entries(grouped).map(([type, pts]) => {
                             const popKey = `${route.id}-badge-${type}`
                             const isOpen = badgePopover === popKey
-                            const badgeTextColor = '#ffffff'
-                            const badgeCountColor = '#ffffff'
-                            const badgeBackground = `linear-gradient(135deg, ${markerColor}, ${markerColor}cc)`
-                            const badgeBorder = markerColor
-                            const badgeTextShadow = `0 1px 2px ${markerColor}40`
                             return (
                               <Popover key={type} open={isOpen} onOpenChange={open => setBadgePopover(open ? popKey : null)}>
                                 <PopoverTrigger asChild>
-                                  <span onClick={() => setBadgePopover(isOpen ? null : popKey)} style={{ display: 'inline-flex', alignItems: 'center', fontSize: badgeFs, fontWeight: 700, color: badgeTextColor, background: badgeBackground, padding: '4px 11px', borderRadius: '6px', border: `1px solid ${badgeBorder}`, boxShadow: `0 4px 16px ${markerColor}30, 0 1px 0 #ffffff1f inset`, flexShrink: 0, letterSpacing: '0.03em', textShadow: badgeTextShadow, cursor: 'pointer', opacity: isOpen ? 0.75 : 1, transition: 'opacity 0.15s, transform 0.15s' }}>
-                                    {getDeliveryLabel(type)}&nbsp;<span style={{ opacity: 0.5, fontWeight: 500 }}>&bull;</span>&nbsp;<span style={{ color: badgeCountColor, fontWeight: 700 }}>{pts.length}</span>
+                                  <span onClick={() => setBadgePopover(isOpen ? null : popKey)} style={{ display: 'inline-flex', alignItems: 'center', fontSize: badgeFs, fontWeight: 700, color: markerColor, background: isDark ? 'hsl(var(--card)/0.45)' : 'hsl(var(--background)/0.95)', padding: '4px 11px', borderRadius: '6px', border: `1px solid ${markerColor}33`, boxShadow: isDark ? `0 1px 2px ${markerColor}15 inset` : 'none', flexShrink: 0, letterSpacing: '0.03em', cursor: 'pointer', opacity: isOpen ? 0.8 : 1, transition: 'opacity 0.15s, transform 0.15s' }}>
+                                    {getDeliveryLabel(type)}&nbsp;<span style={{ opacity: 0.5, fontWeight: 500, color: 'inherit' }}>&bull;</span>&nbsp;<span style={{ color: markerColor, fontWeight: 700 }}>{pts.length}</span>
                                   </span>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-64 p-0 z-50 backdrop-blur-xl bg-background/90 dark:bg-card/90 shadow-2xl rounded-xl overflow-hidden" style={{ border: `1px solid ${cardBorderColor}` }} align="center" side="top">
@@ -2741,23 +2735,18 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                     {savedCustomLabels.length > 0 && (
                       <div style={{ display: 'flex', gap: '0.3rem', flexWrap: 'wrap', justifyContent: 'center', paddingTop: '0.15rem' }}>
                         {savedCustomLabels.map(lbl => {
-                          const badgeTextColor = '#ffffff'
-                          const badgeBg = `linear-gradient(135deg, ${markerColor}, ${markerColor}cc)`
-                          const badgeBorder = markerColor
-                          const badgeTextShadow = `0 1px 2px ${markerColor}40`
                           return (
                           <span
                             key={lbl}
                             style={{
                               display: 'inline-flex', alignItems: 'center',
                               fontSize: badgeFs, fontWeight: 700,
-                              color: badgeTextColor,
-                              background: badgeBg,
+                              color: markerColor,
+                              background: isDark ? 'hsl(var(--card)/0.35)' : 'hsl(var(--background)/0.9)',
                               padding: '4px 11px', borderRadius: '5px',
-                              border: `1px solid ${badgeBorder}`,
-                              boxShadow: `0 2px 8px ${markerColor}35, 0 1px 0 #ffffff1f inset`,
+                              border: `1px solid ${markerColor}33`,
+                              boxShadow: 'none',
                               letterSpacing: '0.03em',
-                              textShadow: badgeTextShadow,
                             }}
                           >
                             {lbl}
@@ -2896,7 +2885,7 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
 
                 {/* ── Panel 3: Edit ── */}
                 <div style={{ width: cardW, flexShrink: 0, height: cardH, display: 'flex', flexDirection: 'column', background: 'transparent' }}>
-                  <div style={{ padding: '0.95rem 1rem 0.8rem', background: `linear-gradient(180deg, ${markerColor}18, transparent)`, borderBottom: '1px solid hsl(var(--border))', display: 'flex', alignItems: 'center', gap: '0.65rem', flexShrink: 0 }}>
+                  <div style={{ padding: '0.95rem 1rem 0.8rem', background: `linear-gradient(135deg, ${markerColor}22, ${markerColor}0a)`, borderBottom: `1.5px solid ${markerColor}30`, display: 'flex', alignItems: 'center', gap: '0.65rem', flexShrink: 0 }}>
                     <div style={{ width: 31, height: 31, borderRadius: 9, background: `linear-gradient(135deg, ${markerColor}, ${markerColor}bb)`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, boxShadow: `0 4px 12px ${markerColor}40` }}>
                       <Edit2 style={{ color: '#fff', width: 13, height: 13 }} />
                     </div>
@@ -3007,13 +2996,13 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
 
                     </div>
 
-                    <button onClick={() => { setCardPanels(prev => ({ ...prev, [route.id]: { info: false, edit: false } })); setRouteToDelete(route); setDeleteRouteConfirmOpen(true) }} style={{ borderRadius: 9, fontSize: editLabelFs, fontWeight: 700, padding: '0.55rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', background: 'none', color: '#dc2626', border: 'none', cursor: 'pointer', width: '100%', justifyContent: 'center' }}>
+                    <button onClick={() => { setCardPanels(prev => ({ ...prev, [route.id]: { info: false, edit: false } })); setRouteToDelete(route); setDeleteRouteConfirmOpen(true) }} style={{ borderRadius: 11, fontSize: editLabelFs, fontWeight: 700, padding: '0.55rem 0.75rem', display: 'flex', alignItems: 'center', gap: '0.4rem', background: isDark ? 'hsl(var(--card)/0.5)' : 'hsl(var(--background)/0.94)', color: '#dc2626', border: `1px solid ${markerColor}22`, cursor: 'pointer', width: '100%', justifyContent: 'center' }}>
                       <Trash2 style={{ width: 13, height: 13 }} /> Delete Route
                     </button>
                   </div>
 
-                  <div style={{ padding: '0.75rem 1rem 1rem', display: 'flex', gap: '0.5rem', flexShrink: 0, borderTop: '1px solid hsl(var(--border))', background: 'hsl(var(--background)/0.66)' }}>
-                    <button onClick={() => { setCardPanels(prev => ({ ...prev, [route.id]: { info: false, edit: false } })); setEditPanelState(prev => { const n = { ...prev }; delete n[route.id]; return n }); setEditPanelErrors(prev => { const n = { ...prev }; delete n[route.id]; return n }) }} style={{ flex: 1, borderRadius: 8, fontSize: editActionFs, fontWeight: 700, padding: '0.45rem 0', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'transparent', color: '#dc2626', border: 'none', boxShadow: 'none', cursor: 'pointer' }}>
+                  <div style={{ padding: '0.75rem 1rem 1rem', display: 'flex', gap: '0.5rem', flexShrink: 0, borderTop: `1px solid ${markerColor}20`, background: isDark ? 'hsl(var(--card)/0.66)' : 'hsl(var(--background)/0.8)' }}>
+                    <button onClick={() => { setCardPanels(prev => ({ ...prev, [route.id]: { info: false, edit: false } })); setEditPanelState(prev => { const n = { ...prev }; delete n[route.id]; return n }); setEditPanelErrors(prev => { const n = { ...prev }; delete n[route.id]; return n }) }} style={{ flex: 1, borderRadius: 11, fontSize: editActionFs, fontWeight: 700, padding: '0.45rem 0', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.35rem', background: isDark ? 'hsl(var(--card)/0.4)' : 'hsl(var(--background)/0.9)', color: isDark ? '#e2e8f0' : '#334155', border: `1px solid ${markerColor}15`, boxShadow: 'none', cursor: 'pointer' }}>
                       <X style={{ width: 12, height: 12 }} /> Cancel
                     </button>
                     {(() => {
@@ -3032,7 +3021,7 @@ export function RouteList({ variant = 'route-list' }: RouteListProps) {
                             setEditPanelErrors(prev => { const n = { ...prev }; delete n[route.id]; return n })
                             toast.success('Route updated', { description: `"${ep.name}" · remember to save.`, icon: <CheckCircle2 className="size-4 text-primary" />, duration: 3000 })
                           }}
-                          style={{ flex: 1, borderRadius: 8, fontSize: editActionFs, fontWeight: 700, padding: '0.45rem 0', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.35rem', background: 'transparent', color: hasEditChanges && !hasPanelErrors ? '#16a34a' : 'hsl(var(--muted-foreground))', border: 'none', boxShadow: 'none', cursor: hasEditChanges && !hasPanelErrors ? 'pointer' : 'not-allowed', opacity: hasEditChanges && !hasPanelErrors ? 1 : 0.65, transition: 'all 0.15s' }}
+                          style={{ flex: 1, borderRadius: 11, fontSize: editActionFs, fontWeight: 700, padding: '0.45rem 0', justifyContent: 'center', display: 'flex', alignItems: 'center', gap: '0.35rem', background: hasEditChanges && !hasPanelErrors ? `linear-gradient(135deg, ${markerColor}, ${markerColor}cc)` : 'hsl(var(--border)/0.15)', color: hasEditChanges && !hasPanelErrors ? '#fff' : 'hsl(var(--muted-foreground))', border: 'none', boxShadow: hasEditChanges && !hasPanelErrors ? `0 3px 10px ${markerColor}30` : 'none', cursor: hasEditChanges && !hasPanelErrors ? 'pointer' : 'not-allowed', opacity: hasEditChanges && !hasPanelErrors ? 1 : 0.65, transition: 'all 0.15s' }}
                         >
                           <Check style={{ width: 12, height: 12 }} /> Save
                         </button>

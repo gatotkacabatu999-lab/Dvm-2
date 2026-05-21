@@ -96,10 +96,10 @@ export function LandingPage({ onEnter }: { onEnter: () => void }) {
         <div className="w-full max-w-3xl mx-auto text-center space-y-6 sm:space-y-8">
           {/* Main Title */}
           <h1
-            className={`mx-auto max-w-[14ch] px-2 text-[clamp(1.1rem,5.5vw,1.75rem)] sm:text-[1.25rem] lg:text-[1.55rem] font-bold tracking-tight break-words [text-wrap:balance] text-foreground transition-all duration-700 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
+            className={`mx-auto max-w-[14ch] px-2 text-[clamp(1.1rem,5.5vw,1.65rem)] sm:text-[1.2rem] lg:text-[1.5rem] font-bold tracking-tight break-words [text-wrap:balance] text-foreground transition-all duration-700 ${visible ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
             style={{ transitionDelay: visible ? "100ms" : "0ms" }}
           >
-            Info Driver
+            Data Management
           </h1>
 
           {/* Description */}

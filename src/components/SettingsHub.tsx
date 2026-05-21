@@ -1,4 +1,4 @@
-import { Type, Palette, Database, Lock, ChevronRight, Settings2, User, Bell, LogOut } from "lucide-react"
+import { Type, Palette, Database, Lock, ChevronRight, Cog, User, Bell, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 
@@ -23,7 +23,7 @@ const SETTINGS_ITEMS: SettingsItem[] = [
     title: "Route Colours",
     description: "Set custom colours for each route.",
     page: "settings-route-colors",
-    accentClass: "text-pink-400 bg-pink-400/10",
+    accentClass: "text-pink-400",
   },
   {
     icon: <Database className="size-5" />,
@@ -81,7 +81,7 @@ export function SettingsHub({ onNavigate }: { onNavigate: (page: string) => void
       {/* Header */}
       <div className="flex items-center gap-3">
         <div className="flex items-center justify-center size-9 rounded-xl bg-primary/10 text-primary shrink-0">
-          <Settings2 className="size-5" />
+          <Cog className="size-5" />
         </div>
         <div>
           <h1 className="text-base font-semibold text-foreground leading-tight">Settings</h1>

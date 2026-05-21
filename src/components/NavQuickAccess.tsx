@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ClipboardList, MapPin, Users, Package, Images, Settings2, Plus, X, Zap } from "lucide-react"
+import { ClipboardList, MapPin, Users, Package, Images, Cog, Plus, X, Zap } from "lucide-react"
 import { createPortal } from "react-dom"
 import { useEditMode } from "@/contexts/EditModeContext"
 import {
@@ -31,7 +31,7 @@ const OPTIONS: QuickAccessOption[] = [
   { id: "rooster",          icon: Users,         label: "Rooster",    description: "Team schedule",        iconClass: "theme-accent-orange" },
   { id: "plano-vm",         icon: Package,       label: "Plano VM",   description: "Planogram tools",      iconClass: "theme-accent-blue" },
   { id: "gallery-album",    icon: Images,        label: "Album",      description: "Photo gallery",        iconClass: "theme-accent-pink" },
-  { id: "settings-profile", icon: Settings2,     label: "Settings",   description: "Profile settings",     iconClass: "theme-accent-indigo" },
+  { id: "settings-profile", icon: Cog,           label: "Settings",   description: "Profile settings",     iconClass: "theme-accent-indigo" },
 ]
 
 function isQuickAccessId(value: unknown): value is QuickAccessId {

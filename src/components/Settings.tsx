@@ -67,7 +67,7 @@ function SectionHeader({ icon, title, description }: { icon: ReactNode; title: s
   return (
     <div className="mb-8 space-y-3">
       <div className="flex items-center gap-3">
-        <div className="flex shrink-0 items-center justify-center p-2 bg-primary/10 rounded-lg text-primary">
+        <div className="flex shrink-0 items-center justify-center p-2 rounded-lg text-primary">
           {icon}
         </div>
         <h2 className="text-lg font-semibold tracking-tight text-foreground">{title}</h2>
@@ -337,7 +337,7 @@ export function Settings({ section = "profile" }: { section?: SectionId }) {
                 >
                   {/* Left: icon + text */}
                   <div className="flex items-center gap-3 min-w-0">
-                    <span className="shrink-0 rounded-md bg-muted p-1.5">{icon}</span>
+                    <span className="shrink-0 rounded-md p-1.5">{icon}</span>
                     <div className="min-w-0">
                       <FieldLabel htmlFor={`notif-${key}`} className="text-sm font-medium leading-tight block truncate">
                         {label}

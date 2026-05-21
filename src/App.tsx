@@ -21,12 +21,11 @@ import { EditModeProvider } from "@/contexts/EditModeContext"
 import { DeviceProvider } from "@/contexts/DeviceContext"
 import { RefreshProvider, useRefresh } from "@/contexts/RefreshContext"
 import { Toaster } from "sonner"
-import { Package, Settings2, Images, ChevronDown, ChevronUp, ChevronsUpDown, ChevronLeft, ArrowUp, ArrowDown, Truck, List, Layers, MapPin, ClipboardList, Users, ExternalLink, Pin, X, Plus, Archive, ArchiveRestore, Search, Info, Cog, MapPinned, TableProperties, Expand, Shrink, Globe, Trash2 } from "lucide-react"
+import { Package, Images, ChevronDown, ChevronUp, ChevronsUpDown, ChevronLeft, ArrowUp, ArrowDown, Truck, List, Layers, MapPin, ClipboardList, Users, ExternalLink, Pin, X, Plus, Archive, ArchiveRestore, Search, Info, Cog, MapPinned, TableProperties, Expand, Shrink, Globe, Trash2 } from "lucide-react"
 import { RowInfoModal } from "@/components/RowInfoModal"
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
@@ -86,7 +85,7 @@ const QUICK_ACCESS_OPTIONS: QuickAccessOption[] = [
   { id: "rooster",          icon: Users,         label: "Rooster",    description: "Team schedule",        iconClass: "theme-accent-orange" },
   { id: "plano-vm",         icon: Package,       label: "Plano VM",   description: "Planogram tools",      iconClass: "theme-accent-blue" },
   { id: "gallery-album",    icon: Images,        label: "Album",      description: "Photo gallery",        iconClass: "theme-accent-pink" },
-  { id: "settings-profile", icon: Settings2,     label: "Settings",   description: "Profile settings",     iconClass: "theme-accent-indigo" },
+  { id: "settings-profile", icon: Cog,           label: "Settings",   description: "Profile settings",     iconClass: "theme-accent-indigo" },
 ]
 
 interface HomeRouteDialogPoint {
@@ -1717,17 +1716,17 @@ function AppContent() {
       case "settings":
         return { current: contentText.breadcrumb.settings }
       case "settings-profile":
-        return { parent: { label: contentText.breadcrumb.settings, icon: Settings2 }, current: contentText.breadcrumb.profile }
+        return { parent: { label: contentText.breadcrumb.settings, icon: Cog }, current: contentText.breadcrumb.profile }
       case "settings-notifications":
-        return { parent: { label: contentText.breadcrumb.settings, icon: Settings2 }, current: contentText.breadcrumb.notifications }
+        return { parent: { label: contentText.breadcrumb.settings, icon: Cog }, current: contentText.breadcrumb.notifications }
       case "settings-appearance-font":
-        return { parent: { label: contentText.breadcrumb.settings, icon: Settings2 }, current: contentText.breadcrumb.font }
+        return { parent: { label: contentText.breadcrumb.settings, icon: Cog }, current: contentText.breadcrumb.font }
       case "settings-route-colors":
-        return { parent: { label: contentText.breadcrumb.settings, icon: Settings2 }, current: contentText.breadcrumb.routeColours }
+        return { parent: { label: contentText.breadcrumb.settings, icon: Cog }, current: contentText.breadcrumb.routeColours }
       case "settings-storage":
-        return { parent: { label: contentText.breadcrumb.settings, icon: Settings2 }, current: contentText.breadcrumb.storage }
+        return { parent: { label: contentText.breadcrumb.settings, icon: Cog }, current: contentText.breadcrumb.storage }
       case "settings-security":
-        return { parent: { label: contentText.breadcrumb.settings, icon: Settings2 }, current: contentText.breadcrumb.security }
+        return { parent: { label: contentText.breadcrumb.settings, icon: Cog }, current: contentText.breadcrumb.security }
       case "plano-vm":
         return { parent: { label: contentText.breadcrumb.gallery, icon: Images }, current: "Plano VM" }
       case "gallery-album":

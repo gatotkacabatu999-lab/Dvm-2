@@ -6,11 +6,14 @@ type LoadingStateProps = {
   className?: string
 }
 
-export function LoadingState({ className }: LoadingStateProps) {
+export function LoadingState({ message = "Loading", description, className }: LoadingStateProps) {
   return (
     <div className={`flex flex-col items-center justify-center gap-3 ${className ?? ""}`}>
       <Loader2Icon className="size-8 animate-spin text-muted-foreground" />
-      <p className="text-sm text-muted-foreground">Loading</p>
+      <div className="text-center">
+        <p className="text-sm font-semibold text-foreground animate-pulse">{message}</p>
+        {description ? <p className="text-xs text-muted-foreground mt-1">{description}</p> : null}
+      </div>
     </div>
   )
 }

@@ -735,8 +735,8 @@ export function DeliveryTableDialog() {
         )}
         {/* ── Optimised badge ── */}
         {isOptimized && (
-          <span className="flex items-center gap-1 h-6 px-2 rounded-full border border-emerald-300 dark:border-emerald-700 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-[10px] font-semibold shrink-0">
-            <Navigation2 className="size-2.5" />Optimised
+          <span className="flex items-center gap-1 h-6 px-3 rounded-full border border-blue-700 bg-blue-600 text-white shadow-sm shadow-blue-700/20 ring-1 ring-blue-600/10 text-[10px] font-semibold shrink-0">
+            <Navigation2 className="size-2.5 text-white" />Optimised
           </span>
         )}
         {/* ── Read-only badge (shared view) / unified Links action ── */}
@@ -1113,7 +1113,7 @@ export function DeliveryTableDialog() {
                   onClick={() => { setIsOptimized(v => !v); setSortOpen(false) }}
                   className={cn(
                     "w-full flex items-center justify-between px-3 py-2 text-xs hover:bg-muted/60 transition-colors",
-                    isOptimized ? "text-emerald-600 dark:text-emerald-400 font-semibold" : "text-foreground"
+                    isOptimized ? "text-blue-700 dark:text-blue-300 font-semibold" : "text-foreground"
                   )}
                 >
                   <span className="flex items-center gap-1.5">

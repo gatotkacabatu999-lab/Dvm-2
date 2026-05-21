@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { ClipboardList, MapPin, Users, Package, Images, Settings2 } from "lucide-react"
+import { ClipboardList, MapPin, Users, Package, Images, Cog } from "lucide-react"
 import {
   SidebarGroup,
   SidebarGroupLabel,
@@ -28,7 +28,7 @@ const PAGE_OPTIONS: Record<RecentPageId, RecentPageOption> = {
   "rooster": { id: "rooster", icon: Users, label: "Rooster", iconClass: "theme-accent-orange" },
   "plano-vm": { id: "plano-vm", icon: Package, label: "Plano VM", iconClass: "theme-accent-blue" },
   "gallery-album": { id: "gallery-album", icon: Images, label: "Album", iconClass: "theme-accent-pink" },
-  "settings-profile": { id: "settings-profile", icon: Settings2, label: "Settings", iconClass: "theme-accent-indigo" },
+  "settings-profile": { id: "settings-profile", icon: Cog, label: "Settings", iconClass: "theme-accent-indigo" },
 }
 
 function isRecentPageId(value: unknown): value is RecentPageId {

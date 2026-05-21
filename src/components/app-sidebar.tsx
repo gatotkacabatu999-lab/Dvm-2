@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import fmLogo from "../../icon/fmlogo.png"
+import sidebarBgLogo from "../../icon/IMG_0011.jpeg"
 import {
   ChevronsUpDown,
   Loader2,
@@ -39,7 +40,6 @@ import { Switch } from "@/components/ui/switch"
 
 import { NavMain } from "@/components/nav-main"
 import { NavProjects } from "@/components/nav-projects"
-import { NavRecent } from "@/components/NavRecent"
 import {
   Sidebar,
   SidebarContent,
@@ -233,24 +233,33 @@ export function AppSidebar({
     >
       <div className="flex flex-col h-full min-h-0">
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem className="flex w-full items-center justify-center">
-            <SidebarMenuButton 
-              size="lg" 
-              asChild
-              className="!h-auto !w-full !justify-center !gap-0 !p-0"
-              onClick={() => onNavigate?.("home")}
-            >
-              <a href="#" className="flex w-full items-center justify-center">
-                <img
-                  src={fmLogo}
-                  alt="FM logo"
-                  className="mx-auto h-[90px] w-[90px] shrink-0 object-contain"
-                />
-              </a>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <div className="relative overflow-hidden rounded-3xl bg-background/80 h-[150px]">
+          <img
+            src={sidebarBgLogo}
+            alt=""
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${mode === "light" ? "opacity-50" : "opacity-40"}`}
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background/95" />
+          <SidebarMenu className="relative h-full">
+            <SidebarMenuItem className="flex h-full w-full items-center justify-center">
+              <SidebarMenuButton 
+                size="lg" 
+                asChild
+                className="!h-auto !w-full !justify-center !gap-0 !p-0"
+                onClick={() => onNavigate?.("home")}
+              >
+                <a href="#" className="flex w-full items-center justify-center">
+                  <img
+                    src={fmLogo}
+                    alt="FM logo"
+                    className="mx-auto h-[90px] w-[90px] shrink-0 object-contain"
+                  />
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </div>
       </SidebarHeader>
       <Separator className="my-1" />
       {/* Search field */}
@@ -273,10 +282,6 @@ export function AppSidebar({
         )}
       </div>
       <SidebarContent>
-        <NavRecent
-          onNavigate={onNavigate}
-          searchQuery={searchQuery}
-        />
         <Separator className="my-2" />
         <NavMain
           items={filteredNavMain}

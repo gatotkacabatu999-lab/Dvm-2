@@ -329,7 +329,12 @@ const GroupedMarkerItem = memo(function GroupedMarkerItem({ points, markerStyle,
 export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline = false, markerStyle = "pin", mapStyle = "google-streets", startPoint, includeStartInBounds = true, refitToken = 0, resizeToken = 0 }: DeliveryMapProps) {
   const [activeGroupKey, setActiveGroupKey] = useState<string | null>(null)
   const [renderedMarkerCount, setRenderedMarkerCount] = useState(INITIAL_MARKER_RENDER)
-  const tiles = TILE_CONFIG[mapStyle]
+  const [activeMapStyle, setActiveMapStyle] = useState<typeof mapStyle>(mapStyle)
+  const [showPolylineState, setShowPolylineState] = useState<boolean>(showPolyline)
+  const [markerStyleState, setMarkerStyleState] = useState<typeof markerStyle>(markerStyle)
+  const tiles = TILE_CONFIG[activeMapStyle]
+  const containerRef = useRef<HTMLDivElement | null>(null)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const toggleActive = useCallback((key: string) => {
     if (key === "") {
@@ -348,7 +353,7 @@ export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline =
   // Render marker nodes progressively to avoid long first-paint stalls on large routes.
   useEffect(() => {
     setRenderedMarkerCount(INITIAL_MARKER_RENDER)
-  }, [deferredPoints.length, mapStyle, markerStyle])
+  }, [deferredPoints.length, activeMapStyle, markerStyleState])
 
   useEffect(() => {
     if (renderedMarkerCount >= deferredPoints.length) return
@@ -431,7 +436,7 @@ export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline =
   }, [deferredPoints, startPoint])
 
   const polylineGroups = useMemo(() => {
-    if (!showPolyline) return [] as Array<{ id: string; positions: [number, number][] }>
+    if (!showPolylineState) return [] as Array<{ id: string; positions: [number, number][] }>
 
     // Polyline follows only locations that are active for today's delivery schedule.
     const polylinePoints = deferredPoints.filter((point) => isDeliveryOnToday(point.delivery))
@@ -447,13 +452,14 @@ export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline =
     return Array.from(grouped.entries())
       .map(([id, positions]) => ({ id, positions }))
       .filter((item) => item.positions.length >= 2)
-  }, [deferredPoints, showPolyline, startPoint])
+  }, [deferredPoints, showPolylineState, startPoint])
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+    <div ref={containerRef} style={{ position: 'relative', width: '100%', height: '100%' }}>
       <MapContainer
         center={center}
         zoom={13}
+        zoomControl={false}
         preferCanvas={true}
         zoomAnimation={false}
         fadeAnimation={false}
@@ -480,7 +486,7 @@ export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline =
         <Marker
           key="start-point"
           position={[startPoint.lat, startPoint.lng]}
-          icon={getCachedMarkerIcon(markerStyle, "#111111", false)}
+          icon={getCachedMarkerIcon(markerStyleState, "#111111", false)}
         >
           <Popup autoPan={false}>
             <div style={{ fontFamily: "system-ui, sans-serif", minWidth: 120 }}>
@@ -500,7 +506,7 @@ export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline =
         <GroupedMarkerItem
           key={key}
           points={points}
-          markerStyle={markerStyle}
+          markerStyle={markerStyleState}
           color={color}
           isActive={activeGroupKey === key}
           groupKey={key}
@@ -508,6 +514,34 @@ export function DeliveryMap({ deliveryPoints, scrollZoom = false, showPolyline =
         />
       ))}
       </MapContainer>
+
+      {/* Control panel overlay */}
+      <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 1000, pointerEvents: 'none' }}>
+        <div style={{ pointerEvents: 'auto', background: 'rgba(255,255,255,0.95)', borderRadius: 12, padding: 8, boxShadow: '0 8px 20px rgba(15,23,42,0.12)', display: 'flex', gap: 8, alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+            <button aria-label="Zoom in" onClick={() => mapRef.current?.zoomIn()} style={{ width: 36, height: 36, borderRadius: 8, border: 'none', background: '#111', color: '#fff' }}>+</button>
+            <button aria-label="Zoom out" onClick={() => mapRef.current?.zoomOut()} style={{ width: 36, height: 36, borderRadius: 8, border: 'none', background: '#fff', color: '#111', boxShadow: 'inset 0 0 0 1px #e5e7eb' }}>−</button>
+          </div>
+          <select value={activeMapStyle} onChange={(e) => setActiveMapStyle(e.target.value as any)} style={{ height: 36, borderRadius: 8, padding: '0 8px', border: '1px solid #e5e7eb', background: '#fff' }}>
+            <option value="google-streets">Streets</option>
+            <option value="google-satellite">Satellite</option>
+            <option value="osm">OSM</option>
+          </select>
+          <button onClick={() => setShowPolylineState(s => !s)} style={{ height: 36, borderRadius: 8, padding: '0 10px', border: '1px solid #e5e7eb', background: showPolylineState ? '#2563eb' : '#fff', color: showPolylineState ? '#fff' : '#111' }}>{showPolylineState ? 'Route On' : 'Route Off'}</button>
+          <select value={markerStyleState} onChange={(e) => setMarkerStyleState(e.target.value as any)} style={{ height: 36, borderRadius: 8, padding: '0 8px', border: '1px solid #e5e7eb', background: '#fff' }}>
+            <option value="pin">Pin</option>
+            <option value="dot">Dot</option>
+            <option value="ring">Ring</option>
+          </select>
+          <button onClick={() => {
+            if (!document.fullscreenElement) {
+              containerRef.current?.requestFullscreen().then(() => setIsFullscreen(true)).catch(() => {})
+            } else {
+              document.exitFullscreen().then(() => setIsFullscreen(false)).catch(() => {})
+            }
+          }} style={{ height: 36, borderRadius: 8, padding: '0 10px', border: '1px solid #e5e7eb', background: '#fff' }}>{isFullscreen ? 'Exit' : 'Full'}</button>
+        </div>
+      </div>
       {initialBounds && (
         <button
           type="button"
