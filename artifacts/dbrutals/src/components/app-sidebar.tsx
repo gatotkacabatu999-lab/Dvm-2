@@ -291,7 +291,7 @@ export function AppSidebar({
           </div>
         )}
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="p-0">
         <SidebarMenu className="px-1 pt-1">
           <SidebarMenuItem className="rounded-lg border border-border/60">
             <DropdownMenu>
