@@ -1,0 +1,25 @@
+kind = "mobile"
+previewPath = "/mobile"
+title = "Dbrutals Mobile"
+version = "1.0.0"
+id = "artifacts/dbrutals-mobile"
+router = "path"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+name = "expo"
+paths = [ "/mobile" ]
+localPort = 8081
+
+[services.development]
+run = "pnpm --filter @workspace/dbrutals-mobile run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/dbrutals-mobile", "run", "build" ]
+serve = "node artifacts/dbrutals-mobile/server/serve.js"
+
+[services.env]
+PORT = "8081"
