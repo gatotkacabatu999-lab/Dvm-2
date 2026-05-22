@@ -1,7 +1,7 @@
 import { Feather } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
-import { router } from "expo-router";
 import * as Haptics from "expo-haptics";
+import { router } from "expo-router";
 import React from "react";
 import {
   Platform,
@@ -19,10 +19,12 @@ import { useColors } from "@/hooks/useColors";
 import { fetchRoutes, type Route } from "@/lib/api";
 
 const QUICK_TILES = [
-  { id: "routes", label: "Routes", icon: "clipboard", color: "accentViolet", tab: "routes" },
-  { id: "rooster", label: "Rooster", icon: "users", color: "accentOrange", tab: "rooster" },
-  { id: "calendar", label: "Calendar", icon: "calendar", color: "accentBlue", tab: "calendar" },
-  { id: "deliveries", label: "Deliveries", icon: "map-pin", color: "accentEmerald", tab: "deliveries" },
+  { id: "routes",      label: "Routes",    icon: "clipboard", colorKey: "accentViolet",  href: "/(tabs)/routes" },
+  { id: "rooster",     label: "Rooster",   icon: "users",     colorKey: "accentOrange",  href: "/(tabs)/rooster" },
+  { id: "calendar",    label: "Calendar",  icon: "calendar",  colorKey: "accentBlue",    href: "/(tabs)/calendar" },
+  { id: "location",    label: "Location",  icon: "map-pin",   colorKey: "accentEmerald", href: "/(tabs)/deliveries" },
+  { id: "plano",       label: "Plano VM",  icon: "package",   colorKey: "accentIndigo",  href: "/plano" },
+  { id: "album",       label: "Album",     icon: "image",     colorKey: "accentPink",    href: "/album" },
 ] as const;
 
 function QuickTile({
@@ -47,7 +49,7 @@ function QuickTile({
           backgroundColor: colors.card,
           borderColor: colors.border,
           borderRadius: colors.radius,
-          opacity: pressed ? 0.7 : 1,
+          opacity: pressed ? 0.75 : 1,
         },
       ]}
     >
@@ -64,12 +66,19 @@ function RouteRow({ route }: { route: Route }) {
   const colors = useColors();
   const shiftColor = route.shift === "AM" ? colors.accentOrange : colors.accentBlue;
   return (
-    <View style={[styles.routeRow, { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius }]}>
+    <View
+      style={[
+        styles.routeRow,
+        { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius },
+      ]}
+    >
       <View style={[styles.shiftBadge, { backgroundColor: shiftColor + "22" }]}>
         <Text style={[styles.shiftText, { color: shiftColor }]}>{route.shift || "—"}</Text>
       </View>
       <View style={styles.routeInfo}>
-        <Text style={[styles.routeName, { color: colors.foreground }]} numberOfLines={1}>{route.name}</Text>
+        <Text style={[styles.routeName, { color: colors.foreground }]} numberOfLines={1}>
+          {route.name}
+        </Text>
         <Text style={[styles.routeCode, { color: colors.mutedForeground }]}>{route.code}</Text>
       </View>
       <View style={[styles.activeDot, { backgroundColor: colors.accentEmerald }]} />
@@ -92,20 +101,39 @@ export default function HomeScreen() {
   const dayName = today.toLocaleDateString("en-US", { weekday: "long" });
   const dateStr = today.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 
+  function navigate(href: string) {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    router.push(href as never);
+  }
+
   return (
     <ScrollView
       style={[styles.scroll, { backgroundColor: colors.background }]}
-      contentContainerStyle={{ paddingTop: topPad + 8, paddingBottom: bottomPad + 120, paddingHorizontal: 16 }}
-      refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />}
+      contentContainerStyle={{
+        paddingTop: topPad + 8,
+        paddingBottom: bottomPad + 120,
+        paddingHorizontal: 16,
+      }}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />
+      }
     >
       <View style={styles.header}>
         <View>
-          <Text style={[styles.greeting, { color: colors.mutedForeground }]}>{dayName}, {dateStr}</Text>
+          <Text style={[styles.greeting, { color: colors.mutedForeground }]}>
+            {dayName}, {dateStr}
+          </Text>
           <Text style={[styles.heroTitle, { color: colors.foreground }]}>Dashboard</Text>
         </View>
-        <View style={[styles.logoBadge, { backgroundColor: colors.muted, borderRadius: colors.radius }]}>
-          <Feather name="truck" size={20} color={colors.foreground} />
-        </View>
+        <Pressable
+          onPress={() => navigate("/settings")}
+          style={({ pressed }) => [
+            styles.settingsBtn,
+            { backgroundColor: colors.muted, borderRadius: colors.radius, opacity: pressed ? 0.7 : 1 },
+          ]}
+        >
+          <Feather name="settings" size={20} color={colors.foreground} />
+        </Pressable>
       </View>
 
       <Text style={[styles.sectionLabel, { color: colors.mutedForeground }]}>QUICK ACCESS</Text>
@@ -115,24 +143,26 @@ export default function HomeScreen() {
             key={tile.id}
             icon={tile.icon}
             label={tile.label}
-            colorKey={tile.color}
-            onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-              router.push(`/(tabs)/${tile.tab}` as never);
-            }}
+            colorKey={tile.colorKey}
+            onPress={() => navigate(tile.href)}
           />
         ))}
       </View>
 
       <View style={styles.sectionRow}>
-        <Text style={[styles.sectionLabel, { color: colors.mutedForeground }]}>ROUTES</Text>
-        <Pressable onPress={() => router.push("/(tabs)/routes" as never)}>
+        <Text style={[styles.sectionLabel, { color: colors.mutedForeground }]}>TODAY'S ROUTES</Text>
+        <Pressable onPress={() => navigate("/(tabs)/routes")}>
           <Text style={[styles.seeAll, { color: colors.accentBlue }]}>See all</Text>
         </Pressable>
       </View>
 
       {isLoading ? (
-        <View style={[styles.skeletonCard, { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius }]} />
+        <View
+          style={[
+            styles.skeletonCard,
+            { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius },
+          ]}
+        />
       ) : routes.length === 0 ? (
         <EmptyState icon="inbox" title="No routes found" subtitle="Routes will appear here once added" />
       ) : (
@@ -148,12 +178,27 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   scroll: { flex: 1 },
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 24 },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 24,
+  },
   greeting: { fontSize: 13, fontFamily: "Inter_400Regular", marginBottom: 2 },
   heroTitle: { fontSize: 28, fontFamily: "Inter_700Bold", letterSpacing: -0.5 },
-  logoBadge: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
-  sectionRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 10 },
-  sectionLabel: { fontSize: 11, fontFamily: "Inter_600SemiBold", letterSpacing: 0.8, marginBottom: 10 },
+  settingsBtn: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
+  sectionRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  sectionLabel: {
+    fontSize: 11,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: 0.8,
+    marginBottom: 10,
+  },
   seeAll: { fontSize: 13, fontFamily: "Inter_500Medium" },
   tileGrid: { flexDirection: "row", flexWrap: "wrap", gap: 10, marginBottom: 28 },
   tile: {

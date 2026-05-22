@@ -25,12 +25,12 @@ function NativeTabLayout() {
         <Label>Rooster</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="calendar">
-        <Icon sf={{ default: "calendar", selected: "calendar" }} />
+        <Icon sf={{ default: "calendar", selected: "calendar.badge.clock" }} />
         <Label>Calendar</Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="deliveries">
         <Icon sf={{ default: "mappin", selected: "mappin.circle.fill" }} />
-        <Label>Deliveries</Label>
+        <Label>Location</Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );
@@ -121,7 +121,7 @@ function ClassicTabLayout() {
       <Tabs.Screen
         name="deliveries"
         options={{
-          title: "Deliveries",
+          title: "Location",
           tabBarIcon: ({ color }) =>
             isIOS ? (
               <SymbolView name="mappin" tintColor={color} size={22} />

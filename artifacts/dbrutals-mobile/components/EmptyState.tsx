@@ -14,7 +14,7 @@ export function EmptyState({ icon, title, subtitle }: EmptyStateProps) {
   const colors = useColors();
   return (
     <View style={styles.container}>
-      <View style={[styles.iconWrap, { backgroundColor: colors.muted, borderRadius: colors.radius }]}>
+      <View style={[styles.iconWrap, { backgroundColor: colors.muted, borderRadius: 20 }]}>
         {/* @ts-ignore */}
         <Feather name={icon} size={28} color={colors.mutedForeground} />
       </View>
@@ -31,8 +31,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: 32,
-    paddingVertical: 48,
+    padding: 32,
     gap: 12,
   },
   iconWrap: {

@@ -6,8 +6,8 @@ import { useColors } from "@/hooks/useColors";
 export function LoadingSpinner() {
   const colors = useColors();
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color={colors.accentBlue} />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ActivityIndicator size="large" color={colors.foreground} />
     </View>
   );
 }

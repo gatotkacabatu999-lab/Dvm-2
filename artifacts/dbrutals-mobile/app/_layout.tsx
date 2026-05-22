@@ -14,16 +14,38 @@ import { KeyboardProvider } from "react-native-keyboard-controller";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useColors } from "@/hooks/useColors";
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 function RootLayoutNav() {
+  const colors = useColors();
   return (
-    <Stack screenOptions={{ headerBackTitle: "Back" }}>
+    <Stack
+      screenOptions={{
+        headerBackTitle: "Back",
+        headerStyle: { backgroundColor: colors.background },
+        headerTintColor: colors.foreground,
+        headerTitleStyle: { fontFamily: "Inter_600SemiBold", fontSize: 17 },
+        contentStyle: { backgroundColor: colors.background },
+      }}
+    >
       <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="plano"
+        options={{ title: "Plano VM", presentation: "card" }}
+      />
+      <Stack.Screen
+        name="album"
+        options={{ title: "Album", presentation: "card" }}
+      />
+      <Stack.Screen
+        name="settings"
+        options={{ title: "Settings", presentation: "card" }}
+      />
+      <Stack.Screen name="+not-found" options={{ title: "Not Found" }} />
     </Stack>
   );
 }

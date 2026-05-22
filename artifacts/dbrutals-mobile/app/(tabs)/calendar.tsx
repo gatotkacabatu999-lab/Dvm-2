@@ -62,14 +62,21 @@ function EventCard({ event }: { event: CalendarEvent }) {
           {event.title}
         </Text>
         {today && (
-          <View style={[styles.todayBadge, { backgroundColor: colors.accentEmerald + "22", borderRadius: 6 }]}>
+          <View
+            style={[
+              styles.todayBadge,
+              { backgroundColor: colors.accentEmerald + "22", borderRadius: 6 },
+            ]}
+          >
             <Text style={[styles.todayText, { color: colors.accentEmerald }]}>Today</Text>
           </View>
         )}
       </View>
       <View style={styles.cardMeta}>
         <Feather name="calendar" size={12} color={colors.mutedForeground} />
-        <Text style={[styles.dateText, { color: colors.mutedForeground }]}>{formatEventDate(event.date)}</Text>
+        <Text style={[styles.dateText, { color: colors.mutedForeground }]}>
+          {formatEventDate(event.date)}
+        </Text>
         {event.type ? (
           <>
             <View style={[styles.dot, { backgroundColor: colors.border }]} />
@@ -97,39 +104,55 @@ export default function CalendarScreen() {
     queryFn: fetchCalendar,
   });
 
-  const sorted = useMemo(() => {
-    return [...events].sort((a, b) => {
-      try {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
-      } catch {
-        return 0;
-      }
-    });
-  }, [events]);
+  const sorted = useMemo(
+    () =>
+      [...events].sort((a, b) => {
+        try {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        } catch {
+          return 0;
+        }
+      }),
+    [events],
+  );
 
+  const todayStart = new Date(new Date().setHours(0, 0, 0, 0));
   const upcoming = sorted.filter(e => {
-    try { return new Date(e.date) >= new Date(new Date().setHours(0, 0, 0, 0)); } catch { return true; }
+    try {
+      return new Date(e.date) >= todayStart;
+    } catch {
+      return true;
+    }
   });
-  const past = sorted.filter(e => {
-    try { return new Date(e.date) < new Date(new Date().setHours(0, 0, 0, 0)); } catch { return false; }
-  });
+  const past = sorted
+    .filter(e => {
+      try {
+        return new Date(e.date) < todayStart;
+      } catch {
+        return false;
+      }
+    })
+    .reverse()
+    .slice(0, 10);
 
-  type ListItem =
-    | { type: "section"; title: string }
-    | { type: "event"; event: CalendarEvent };
-
+  type ListItem = { type: "section"; title: string } | { type: "event"; event: CalendarEvent };
   const items: ListItem[] = [
     ...(upcoming.length > 0 ? [{ type: "section" as const, title: "Upcoming" }] : []),
     ...upcoming.map(e => ({ type: "event" as const, event: e })),
     ...(past.length > 0 ? [{ type: "section" as const, title: "Past" }] : []),
-    ...past.reverse().slice(0, 10).map(e => ({ type: "event" as const, event: e })),
+    ...past.map(e => ({ type: "event" as const, event: e })),
   ];
 
   if (isLoading) return <LoadingSpinner />;
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.topBar, { paddingTop: topPad + 8, backgroundColor: colors.background, borderBottomColor: colors.border }]}>
+      <View
+        style={[
+          styles.topBar,
+          { paddingTop: topPad + 8, backgroundColor: colors.background, borderBottomColor: colors.border },
+        ]}
+      >
         <Text style={[styles.screenTitle, { color: colors.foreground }]}>Calendar</Text>
         <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>
           {upcoming.length} upcoming event{upcoming.length !== 1 ? "s" : ""}
@@ -145,14 +168,22 @@ export default function CalendarScreen() {
       ) : (
         <FlatList
           data={items}
-          keyExtractor={(item, i) => (item.type === "section" ? `s-${item.title}` : `e-${item.event.id}-${i}`)}
+          keyExtractor={(item, i) =>
+            item.type === "section" ? `s-${item.title}` : `e-${item.event.id}-${i}`
+          }
           contentContainerStyle={{ padding: 16, paddingBottom: bottomPad + 120 }}
           scrollEnabled={!!items.length}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />
+          }
           renderItem={({ item }) => {
             if (item.type === "section") {
-              return <Text style={[styles.sectionHeader, { color: colors.mutedForeground }]}>{item.title}</Text>;
+              return (
+                <Text style={[styles.sectionHeader, { color: colors.mutedForeground }]}>
+                  {item.title}
+                </Text>
+              );
             }
             return <EventCard event={item.event} />;
           }}
@@ -164,12 +195,27 @@ export default function CalendarScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  topBar: { paddingHorizontal: 16, paddingBottom: 14, borderBottomWidth: StyleSheet.hairlineWidth },
+  topBar: {
+    paddingHorizontal: 16,
+    paddingBottom: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
   screenTitle: { fontSize: 28, fontFamily: "Inter_700Bold", letterSpacing: -0.5 },
   subtitle: { fontSize: 13, fontFamily: "Inter_400Regular", marginTop: 2 },
-  sectionHeader: { fontSize: 11, fontFamily: "Inter_600SemiBold", letterSpacing: 0.8, marginTop: 16, marginBottom: 8 },
+  sectionHeader: {
+    fontSize: 11,
+    fontFamily: "Inter_600SemiBold",
+    letterSpacing: 0.8,
+    marginTop: 16,
+    marginBottom: 8,
+  },
   card: { borderWidth: 1, padding: 14, marginBottom: 8, gap: 8 },
-  cardTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 8 },
+  cardTop: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: 8,
+  },
   eventTitle: { flex: 1, fontSize: 15, fontFamily: "Inter_600SemiBold" },
   todayBadge: { paddingHorizontal: 8, paddingVertical: 3 },
   todayText: { fontSize: 11, fontFamily: "Inter_700Bold" },

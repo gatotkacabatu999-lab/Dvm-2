@@ -26,6 +26,9 @@ export interface DeliveryPoint {
   latitude?: number;
   longitude?: number;
   markerColor?: string;
+  avatarImageUrl?: string;
+  qrCodeImageUrl?: string;
+  qrCodeDestinationUrl?: string;
 }
 
 export interface CalendarEvent {
@@ -55,6 +58,33 @@ export interface DeliveryRecord {
   location?: string;
   notes?: string;
   status?: string;
+}
+
+export interface PlanoPage {
+  id?: string;
+  name?: string;
+  products?: PlanoProduct[];
+  imageUrl?: string;
+  description?: string;
+}
+
+export interface PlanoProduct {
+  id?: string;
+  name?: string;
+  code?: string;
+  stockIn?: number;
+  moveFront?: number;
+  expired?: number;
+  color?: string;
+}
+
+export interface Note {
+  id: string;
+  title?: string;
+  content?: string;
+  routeId?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export async function fetchRoutes(): Promise<Route[]> {
@@ -89,6 +119,25 @@ export async function fetchDeliveries(): Promise<DeliveryRecord[]> {
   try {
     const payload = await apiFetch<{ data?: DeliveryRecord[] } | DeliveryRecord[]>("/api/deliveries");
     const arr = Array.isArray(payload) ? payload : (payload as { data?: DeliveryRecord[] }).data ?? [];
+    return arr;
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchPlano(): Promise<PlanoPage[]> {
+  try {
+    const payload = await apiFetch<{ success?: boolean; data?: PlanoPage[] }>("/api/plano");
+    return payload.data ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function fetchNotes(): Promise<Note[]> {
+  try {
+    const payload = await apiFetch<{ data?: Note[] } | Note[]>("/api/notes");
+    const arr = Array.isArray(payload) ? payload : (payload as { data?: Note[] }).data ?? [];
     return arr;
   } catch {
     return [];

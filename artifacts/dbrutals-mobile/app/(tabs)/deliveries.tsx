@@ -16,14 +16,15 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useColors } from "@/hooks/useColors";
 import { fetchDeliveries, type DeliveryRecord } from "@/lib/api";
 
+function statusColor(status: string | undefined, colors: ReturnType<typeof useColors>): string {
+  if (status === "completed") return colors.accentEmerald;
+  if (status === "pending") return colors.accentAmber;
+  return colors.accentBlue;
+}
+
 function DeliveryCard({ record }: { record: DeliveryRecord }) {
   const colors = useColors();
-  const statusColor =
-    record.status === "completed"
-      ? colors.accentEmerald
-      : record.status === "pending"
-      ? colors.accentAmber
-      : colors.accentBlue;
+  const sColor = statusColor(record.status, colors);
 
   return (
     <View
@@ -32,10 +33,10 @@ function DeliveryCard({ record }: { record: DeliveryRecord }) {
         { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius },
       ]}
     >
-      <View style={[styles.statusDot, { backgroundColor: statusColor }]} />
+      <View style={[styles.statusDot, { backgroundColor: sColor }]} />
       <View style={styles.info}>
         <Text style={[styles.location, { color: colors.foreground }]} numberOfLines={1}>
-          {record.location ?? record.routeName ?? "Location"}
+          {record.location ?? record.routeName ?? "Unknown location"}
         </Text>
         {record.date ? (
           <View style={styles.meta}>
@@ -50,8 +51,8 @@ function DeliveryCard({ record }: { record: DeliveryRecord }) {
         ) : null}
       </View>
       {record.status ? (
-        <View style={[styles.statusChip, { backgroundColor: statusColor + "22", borderRadius: 8 }]}>
-          <Text style={[styles.statusText, { color: statusColor }]}>
+        <View style={[styles.statusChip, { backgroundColor: sColor + "22", borderRadius: 8 }]}>
+          <Text style={[styles.statusText, { color: sColor }]}>
             {record.status.charAt(0).toUpperCase() + record.status.slice(1)}
           </Text>
         </View>
@@ -75,8 +76,13 @@ export default function DeliveriesScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.topBar, { paddingTop: topPad + 8, backgroundColor: colors.background, borderBottomColor: colors.border }]}>
-        <Text style={[styles.screenTitle, { color: colors.foreground }]}>Deliveries</Text>
+      <View
+        style={[
+          styles.topBar,
+          { paddingTop: topPad + 8, backgroundColor: colors.background, borderBottomColor: colors.border },
+        ]}
+      >
+        <Text style={[styles.screenTitle, { color: colors.foreground }]}>Location</Text>
         <Text style={[styles.subtitle, { color: colors.mutedForeground }]}>
           {records.length} record{records.length !== 1 ? "s" : ""}
         </Text>
@@ -85,8 +91,8 @@ export default function DeliveriesScreen() {
       {records.length === 0 ? (
         <EmptyState
           icon="map-pin"
-          title="No deliveries"
-          subtitle="Delivery records will appear here once logged"
+          title="No delivery records"
+          subtitle="Delivery records will appear here once logged via the web app"
         />
       ) : (
         <FlatList
@@ -95,7 +101,9 @@ export default function DeliveriesScreen() {
           contentContainerStyle={{ padding: 16, paddingBottom: bottomPad + 120 }}
           scrollEnabled={!!records.length}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />
+          }
           renderItem={({ item }) => <DeliveryCard record={item} />}
         />
       )}
@@ -105,10 +113,21 @@ export default function DeliveriesScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  topBar: { paddingHorizontal: 16, paddingBottom: 14, borderBottomWidth: StyleSheet.hairlineWidth },
+  topBar: {
+    paddingHorizontal: 16,
+    paddingBottom: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
   screenTitle: { fontSize: 28, fontFamily: "Inter_700Bold", letterSpacing: -0.5 },
   subtitle: { fontSize: 13, fontFamily: "Inter_400Regular", marginTop: 2 },
-  card: { flexDirection: "row", alignItems: "center", borderWidth: 1, padding: 14, marginBottom: 8, gap: 12 },
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 8,
+    gap: 12,
+  },
   statusDot: { width: 10, height: 10, borderRadius: 5 },
   info: { flex: 1, gap: 3 },
   location: { fontSize: 15, fontFamily: "Inter_600SemiBold" },

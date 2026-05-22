@@ -16,13 +16,19 @@ import { LoadingSpinner } from "@/components/LoadingSpinner";
 import { useColors } from "@/hooks/useColors";
 import { fetchRooster, type RoosterEntry } from "@/lib/api";
 
-const AVATAR_COLORS = [
-  "accentBlue", "accentOrange", "accentViolet", "accentEmerald", "accentPink", "accentIndigo", "accentAmber",
-];
+const AVATAR_COLOR_KEYS = [
+  "accentBlue",
+  "accentOrange",
+  "accentViolet",
+  "accentEmerald",
+  "accentPink",
+  "accentIndigo",
+  "accentAmber",
+] as const;
 
 function MemberCard({ member, index }: { member: RoosterEntry; index: number }) {
   const colors = useColors();
-  const colorKey = AVATAR_COLORS[index % AVATAR_COLORS.length];
+  const colorKey = AVATAR_COLOR_KEYS[index % AVATAR_COLOR_KEYS.length];
   const avatarColor = (colors as Record<string, string>)[colorKey] ?? colors.accentBlue;
   const initials = member.name
     .split(" ")
@@ -32,14 +38,24 @@ function MemberCard({ member, index }: { member: RoosterEntry; index: number }) 
     .toUpperCase();
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius }]}>
+    <View
+      style={[
+        styles.card,
+        { backgroundColor: colors.card, borderColor: colors.border, borderRadius: colors.radius },
+      ]}
+    >
       <View style={[styles.avatar, { backgroundColor: avatarColor + "22", borderRadius: 24 }]}>
         <Text style={[styles.avatarText, { color: avatarColor }]}>{initials}</Text>
       </View>
       <View style={styles.info}>
-        <Text style={[styles.name, { color: colors.foreground }]} numberOfLines={1}>{member.name}</Text>
+        <Text style={[styles.name, { color: colors.foreground }]} numberOfLines={1}>
+          {member.name}
+        </Text>
         {member.role ? (
           <Text style={[styles.role, { color: colors.mutedForeground }]}>{member.role}</Text>
+        ) : null}
+        {member.day ? (
+          <Text style={[styles.dayText, { color: colors.mutedForeground }]}>{member.day}</Text>
         ) : null}
       </View>
       {member.shift ? (
@@ -70,10 +86,17 @@ export default function RoosterScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.topBar, { paddingTop: topPad + 8, backgroundColor: colors.background, borderBottomColor: colors.border }]}>
+      <View
+        style={[
+          styles.topBar,
+          { paddingTop: topPad + 8, backgroundColor: colors.background, borderBottomColor: colors.border },
+        ]}
+      >
         <Text style={[styles.screenTitle, { color: colors.foreground }]}>Rooster</Text>
         <View style={[styles.countBadge, { backgroundColor: colors.muted, borderRadius: 10 }]}>
-          <Text style={[styles.countText, { color: colors.mutedForeground }]}>{members.length} members</Text>
+          <Text style={[styles.countText, { color: colors.mutedForeground }]}>
+            {members.length} members
+          </Text>
         </View>
       </View>
 
@@ -90,7 +113,9 @@ export default function RoosterScreen() {
           contentContainerStyle={{ padding: 16, paddingBottom: bottomPad + 120 }}
           scrollEnabled={!!members.length}
           showsVerticalScrollIndicator={false}
-          refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />}
+          refreshControl={
+            <RefreshControl refreshing={isLoading} onRefresh={refetch} tintColor={colors.mutedForeground} />
+          }
           renderItem={({ item, index }) => <MemberCard member={item} index={index} />}
         />
       )}
@@ -100,16 +125,33 @@ export default function RoosterScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
-  topBar: { paddingHorizontal: 16, paddingBottom: 14, borderBottomWidth: StyleSheet.hairlineWidth },
-  screenTitle: { fontSize: 28, fontFamily: "Inter_700Bold", letterSpacing: -0.5, marginBottom: 4 },
+  topBar: {
+    paddingHorizontal: 16,
+    paddingBottom: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  screenTitle: {
+    fontSize: 28,
+    fontFamily: "Inter_700Bold",
+    letterSpacing: -0.5,
+    marginBottom: 4,
+  },
   countBadge: { alignSelf: "flex-start", paddingHorizontal: 10, paddingVertical: 4 },
   countText: { fontSize: 12, fontFamily: "Inter_500Medium" },
-  card: { flexDirection: "row", alignItems: "center", borderWidth: 1, padding: 14, marginBottom: 8, gap: 12 },
+  card: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    padding: 14,
+    marginBottom: 8,
+    gap: 12,
+  },
   avatar: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   avatarText: { fontSize: 16, fontFamily: "Inter_700Bold" },
-  info: { flex: 1 },
+  info: { flex: 1, gap: 2 },
   name: { fontSize: 15, fontFamily: "Inter_600SemiBold" },
-  role: { fontSize: 12, fontFamily: "Inter_400Regular", marginTop: 2 },
+  role: { fontSize: 12, fontFamily: "Inter_400Regular" },
+  dayText: { fontSize: 11, fontFamily: "Inter_400Regular" },
   shiftChip: { paddingHorizontal: 10, paddingVertical: 4 },
   shiftText: { fontSize: 12, fontFamily: "Inter_500Medium" },
 });
