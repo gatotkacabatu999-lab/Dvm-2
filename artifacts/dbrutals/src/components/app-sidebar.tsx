@@ -234,32 +234,14 @@ export function AppSidebar({
     >
       <div className="flex flex-col h-full min-h-0">
       <SidebarHeader className="p-0">
-        <div className="relative overflow-hidden bg-background/80 h-[150px]">
+        <div className="relative overflow-hidden bg-background/80 h-[120px]">
           <img
             src={sidebarBgLogo}
             alt=""
             aria-hidden="true"
-            className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${mode === "light" ? "opacity-50" : "opacity-40"}`}
+            className={`pointer-events-none absolute inset-0 h-full w-full object-cover ${mode === "light" ? "opacity-80" : "opacity-70"}`}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/20 to-background/95" />
-          <SidebarMenu className="relative h-full">
-            <SidebarMenuItem className="flex h-full w-full items-center justify-center">
-              <SidebarMenuButton 
-                size="lg" 
-                asChild
-                className="!h-auto !w-full !justify-center !gap-0 !p-0"
-                onClick={() => onNavigate?.("home")}
-              >
-                <a href="#" className="flex w-full items-center justify-center">
-                  <img
-                    src={fmLogo}
-                    alt="FM logo"
-                    className="mx-auto h-[90px] w-[90px] shrink-0 object-contain"
-                  />
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
+          <div className="absolute inset-0 bg-gradient-to-b from-background/5 to-background/60" />
         </div>
       </SidebarHeader>
       <Separator className="my-1" />
@@ -310,6 +292,20 @@ export function AppSidebar({
         )}
       </SidebarContent>
       <SidebarFooter>
+        {/* FM Logo */}
+        <div className="flex items-center justify-center py-2">
+          <button
+            onClick={() => onNavigate?.("home")}
+            className="flex items-center justify-center rounded-xl p-1 hover:bg-sidebar-accent/40 transition-colors duration-150"
+          >
+            <img
+              src={fmLogo}
+              alt="FM logo"
+              className="h-[52px] w-[52px] shrink-0 object-contain"
+            />
+          </button>
+        </div>
+        <Separator className="mb-1" />
         <SidebarMenu className="px-1 pb-1">
           <SidebarMenuItem className="rounded-lg border border-border/60">
             <DropdownMenu>
