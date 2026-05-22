@@ -299,7 +299,7 @@ export function AppSidebar({
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
-                  className="h-auto rounded-lg px-3 py-2.5 hover:bg-sidebar-accent/50 data-[state=open]:bg-sidebar-accent/70 data-[state=open]:text-sidebar-accent-foreground"
+                  className="h-auto rounded-lg px-3 py-4 hover:bg-sidebar-accent/50 data-[state=open]:bg-sidebar-accent/70 data-[state=open]:text-sidebar-accent-foreground"
                 >
                   <Zap className="size-[18px] shrink-0 text-amber-400" />
                   <span className="flex-1 text-left text-[15px] font-medium">Action</span>
