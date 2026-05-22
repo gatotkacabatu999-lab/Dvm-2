@@ -354,15 +354,15 @@ export function AppSidebar({
         </SidebarMenu>
         <Separator className="mt-1" />
         {/* FM Logo — footer */}
-        <div className="flex items-center justify-center py-1">
+        <div className="flex items-center justify-center py-0">
           <button
             onClick={() => onNavigate?.("home")}
-            className="flex items-center justify-center rounded-xl p-0.5 hover:bg-sidebar-accent/40 transition-colors duration-150"
+            className="flex items-center justify-center rounded-xl p-0 hover:bg-sidebar-accent/40 transition-colors duration-150"
           >
             <img
               src={fmLogo}
               alt="FM logo"
-              className="h-[68px] w-[68px] shrink-0 object-contain"
+              className="h-[80px] w-[80px] shrink-0 object-contain"
             />
           </button>
         </div>
