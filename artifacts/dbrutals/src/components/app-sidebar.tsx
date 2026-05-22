@@ -143,6 +143,7 @@ export function AppSidebar({
   const [openNavItem, setOpenNavItem] = React.useState<string | null>(null)
   const [unsavedDialogOpen, setUnsavedDialogOpen] = React.useState(false)
   const [isEditModeTransitioning, setIsEditModeTransitioning] = React.useState(false)
+  const [actionOpen, setActionOpen] = React.useState(false)
   const { isEditMode, setIsEditMode, hasUnsavedChanges, saveChanges, isSaving, discardChanges } = useEditMode()
   const { mode, toggleMode } = useTheme()
 
@@ -294,7 +295,7 @@ export function AppSidebar({
       <SidebarFooter>
         <SidebarMenu className="px-1 pt-1">
           <SidebarMenuItem className="rounded-lg border border-border/60">
-            <DropdownMenu>
+            <DropdownMenu open={actionOpen} onOpenChange={setActionOpen}>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                   size="lg"
@@ -369,6 +370,12 @@ export function AppSidebar({
       </SidebarFooter>
       </div>{/* end z-10 content wrapper */}
     </Sidebar>
+
+      {/* Action dropdown backdrop */}
+      <div
+        className={`fixed inset-0 z-40 bg-black/40 backdrop-blur-sm transition-all duration-200 ${actionOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
+        onClick={() => setActionOpen(false)}
+      />
 
       {/* Unsaved Changes Dialog */}
       <Dialog open={unsavedDialogOpen} onOpenChange={setUnsavedDialogOpen}>
