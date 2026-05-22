@@ -230,13 +230,17 @@ function Sidebar({
       <div
         data-slot="sidebar-container"
         className={cn(
-          "fixed inset-y-0 z-50 hidden w-(--sidebar-width) transition-[left,right,width] duration-[250ms] ease-[cubic-bezier(0.4,0,0.6,1)] md:flex",
+          "fixed z-50 hidden w-(--sidebar-width) transition-[left,right,top,bottom,width] duration-[250ms] ease-[cubic-bezier(0.4,0,0.6,1)] md:flex",
+          variant === "floating" ? "top-3 bottom-3" : "inset-y-0",
           side === "left"
-            ? "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] group-data-[state=collapsed]:left-[calc(var(--sidebar-width)*-1)]"
-            : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] group-data-[state=collapsed]:right-[calc(var(--sidebar-width)*-1)]",
-          // Adjust the padding for floating and inset variants.
+            ? variant === "floating"
+              ? "left-3 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] group-data-[state=collapsed]:left-[calc(var(--sidebar-width)*-1)]"
+              : "left-0 group-data-[collapsible=offcanvas]:left-[calc(var(--sidebar-width)*-1)] group-data-[state=collapsed]:left-[calc(var(--sidebar-width)*-1)]"
+            : variant === "floating"
+              ? "right-3 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] group-data-[state=collapsed]:right-[calc(var(--sidebar-width)*-1)]"
+              : "right-0 group-data-[collapsible=offcanvas]:right-[calc(var(--sidebar-width)*-1)] group-data-[state=collapsed]:right-[calc(var(--sidebar-width)*-1)]",
           variant === "floating" || variant === "inset"
-            ? "p-2 group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
+            ? "group-data-[collapsible=icon]:w-[calc(var(--sidebar-width-icon)+(--spacing(4))+2px)]"
             : "group-data-[collapsible=icon]:w-(--sidebar-width-icon) group-data-[side=left]:border-r group-data-[side=right]:border-l",
           className
         )}
@@ -246,7 +250,10 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
           className={cn(
-            "bg-sidebar group-data-[variant=floating]:border-sidebar-border flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm",
+            "bg-sidebar flex h-full w-full flex-col overflow-hidden",
+            variant === "floating"
+              ? "rounded-[18px] border border-sidebar-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.28),0_2px_8px_rgba(0,0,0,0.12)] backdrop-blur-xl"
+              : "group-data-[variant=floating]:border-sidebar-border group-data-[variant=floating]:rounded-lg group-data-[variant=floating]:border group-data-[variant=floating]:shadow-sm",
             innerClassName
           )}
           style={innerStyle}

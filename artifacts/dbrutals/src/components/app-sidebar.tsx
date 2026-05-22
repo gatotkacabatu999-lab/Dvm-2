@@ -230,6 +230,7 @@ export function AppSidebar({
     <>
     <Sidebar
       {...props}
+      variant="floating"
     >
       <div className="flex flex-col h-full min-h-0">
       <SidebarHeader>
