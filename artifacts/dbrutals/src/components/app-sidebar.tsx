@@ -233,8 +233,8 @@ export function AppSidebar({
       variant="floating"
     >
       <div className="flex flex-col h-full min-h-0">
-      <SidebarHeader>
-        <div className="relative overflow-hidden rounded-3xl bg-background/80 h-[150px]">
+      <SidebarHeader className="p-0">
+        <div className="relative overflow-hidden bg-background/80 h-[150px]">
           <img
             src={sidebarBgLogo}
             alt=""
