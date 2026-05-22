@@ -258,28 +258,20 @@ const persistLinks = (links: SavedLink[]) => {
 }
 
 const shortenUrl = async (longUrl: string): Promise<string> => {
-  const services = [
-    (url: string) => `https://is.gd/create.php?format=json&url=${encodeURIComponent(url)}`,
-  ]
-
-  for (const buildUrl of services) {
-    try {
-      const res = await fetch(buildUrl(longUrl))
-      if (!res.ok) continue
-      const text = await res.text()
-      const trimmed = text.trim()
-      if (!trimmed) continue
-      if (trimmed.startsWith("{") && trimmed.includes("shorturl")) {
-        const json = JSON.parse(trimmed) as { shorturl?: string }
-        if (json.shorturl) return json.shorturl
-      } else if (trimmed.startsWith("http")) {
-        return trimmed
-      }
-    } catch {
-      continue
+  try {
+    const res = await fetch("/api/shorten", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ url: longUrl }),
+      signal: AbortSignal.timeout(10000),
+    })
+    if (res.ok) {
+      const json = await res.json() as { shortUrl?: string }
+      if (json.shortUrl && json.shortUrl.startsWith("http")) return json.shortUrl
     }
+  } catch {
+    // fall through to original URL
   }
-
   return longUrl
 }
 
