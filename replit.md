@@ -1,6 +1,6 @@
-# [Project name]
+# Dbrutals
 
-_Replace the heading above with the project's name, and this line with one sentence describing what this app does for users._
+Route planning, team scheduling, and delivery management app for vending machine operations.
 
 ## Run & Operate
 
@@ -22,15 +22,24 @@ _Replace the heading above with the project's name, and this line with one sente
 
 ## Where things live
 
-_Populate as you build — short repo map plus pointers to the source-of-truth file for DB schema, API contracts, theme files, etc._
+- `artifacts/dbrutals/src/` — React + Vite frontend
+- `artifacts/dbrutals/src/App.tsx` — main app with all page routing and sidebar
+- `artifacts/dbrutals/src/index.css` — theme (dark/light CSS vars, fonts, animations)
+- `artifacts/api-server/src/routes/` — Express route handlers (routes, calendar, notes, plano, rooster, route-notes, deliveries, proxy-image)
+- `artifacts/dbrutals/public/` — static assets (PWA icons, manifest, service worker)
+- `artifacts/dbrutals/icon/` — internal image assets (noimage.jpeg, fmlogo.png, etc.)
 
 ## Architecture decisions
 
-_Populate as you build — non-obvious choices a reader couldn't infer from the code (3-5 bullets)._
+- API originally used Neon serverless SQL; migrated to Replit PostgreSQL via `@workspace/db` pool
+- Tables are created on first request (CREATE TABLE IF NOT EXISTS pattern) — no separate migration step needed
+- Frontend is a fully client-rendered SPA with localStorage for persisted state (routes, pinned, quick access)
+- Dark/light mode applied before React mounts via inline script to prevent flash
+- App zoom is responsive: 100% mobile, 120% desktop, configurable per user
 
 ## Product
 
-_Describe the high-level user-facing capabilities of this app once they exist._
+Route & Calendar Management for delivery/vending operations: manage delivery routes with GPS-enabled maps, track team rosters and shift schedules, view planogram (Plano VM) data, browse photo albums, monitor delivery locations, and manage calendar events — all with light/dark theme and PWA support.
 
 ## User preferences
 
