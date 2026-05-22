@@ -362,7 +362,7 @@ export function AppSidebar({
             <img
               src={fmLogo}
               alt="FM logo"
-              className="h-[52px] w-[52px] shrink-0 object-contain"
+              className="h-[68px] w-[68px] shrink-0 object-contain"
             />
           </button>
         </div>
