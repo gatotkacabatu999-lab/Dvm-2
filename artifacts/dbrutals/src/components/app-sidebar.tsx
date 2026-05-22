@@ -292,21 +292,7 @@ export function AppSidebar({
         )}
       </SidebarContent>
       <SidebarFooter>
-        {/* FM Logo */}
-        <div className="flex items-center justify-center py-2">
-          <button
-            onClick={() => onNavigate?.("home")}
-            className="flex items-center justify-center rounded-xl p-1 hover:bg-sidebar-accent/40 transition-colors duration-150"
-          >
-            <img
-              src={fmLogo}
-              alt="FM logo"
-              className="h-[52px] w-[52px] shrink-0 object-contain"
-            />
-          </button>
-        </div>
-        <Separator className="mb-1" />
-        <SidebarMenu className="px-1 pb-1">
+        <SidebarMenu className="px-1 pt-1">
           <SidebarMenuItem className="rounded-lg border border-border/60">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -366,6 +352,20 @@ export function AppSidebar({
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
+        <Separator className="mt-1" />
+        {/* FM Logo — footer */}
+        <div className="flex items-center justify-center py-2">
+          <button
+            onClick={() => onNavigate?.("home")}
+            className="flex items-center justify-center rounded-xl p-1 hover:bg-sidebar-accent/40 transition-colors duration-150"
+          >
+            <img
+              src={fmLogo}
+              alt="FM logo"
+              className="h-[68px] w-[68px] shrink-0 object-contain"
+            />
+          </button>
+        </div>
       </SidebarFooter>
       </div>{/* end z-10 content wrapper */}
     </Sidebar>
