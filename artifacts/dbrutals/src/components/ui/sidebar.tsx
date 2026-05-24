@@ -188,7 +188,7 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden rounded-[18px] overflow-hidden border border-sidebar-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.32),0_2px_8px_rgba(0,0,0,0.14)]"
+          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden rounded-[18px] overflow-hidden border border-sidebar-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.32),0_2px_8px_rgba(0,0,0,0.14)] h-auto"
           onOpenAutoFocus={e => e.preventDefault()}
           style={
             {
@@ -196,7 +196,6 @@ function Sidebar({
               top: "calc(env(safe-area-inset-top) + 12px)",
               bottom: "12px",
               left: "12px",
-              height: "calc(100dvh - env(safe-area-inset-top) - 24px)",
             } as React.CSSProperties
           }
           side={side}
