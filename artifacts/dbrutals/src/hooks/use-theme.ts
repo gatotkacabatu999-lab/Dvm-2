@@ -146,9 +146,11 @@ export function useTheme() {
     localStorage.setItem("app-font", appFont)
   }, [appFont])
 
-  // Apply zoom (applied to body to avoid viewport distortion)
+  // Apply zoom via CSS variable only — actual zoom applied to <main> in App.tsx
+  // so sidebar (fixed/floating) is never affected by CSS zoom scaling
   useEffect(() => {
-    document.body.style.zoom = `${appZoom}%`
+    document.body.style.zoom = ""
+    document.documentElement.style.setProperty("--app-zoom", appZoom)
     localStorage.setItem("app-zoom", appZoom)
   }, [appZoom])
 

@@ -1586,7 +1586,7 @@ function AppContent() {
   const [isTransitioning, setIsTransitioning] = useState(false)
   const [pinnedRouteCount, setPinnedRouteCount] = useState(0)
   const { open, openMobile, isMobile, toggleSidebar, setOpen, setOpenMobile } = useSidebar()
-  const { mode } = useTheme()
+  const { mode, appZoom } = useTheme()
   const isDark = mode === "dark"
   const isSidebarActive = (isMobile && openMobile) || (!isMobile && open)
   const { hasUnsavedChanges, isSaving, saveChanges, isEditMode } = useEditMode()
@@ -1751,7 +1751,7 @@ function AppContent() {
       
       <main
         className={`relative isolate flex w-full flex-1 flex-col min-h-0 overflow-hidden bg-background origin-center transition-all duration-350 ease-out will-change-[transform,filter,opacity] ${!isSharedView && isSidebarActive ? "opacity-70 scale-[0.955] blur-[3px] saturate-75" : "opacity-100 scale-100 blur-0 saturate-100"}`}
-        style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+        style={{ paddingBottom: 'env(safe-area-inset-bottom)', zoom: `${appZoom}%` }}
       >
         {isDark && (
           <>
