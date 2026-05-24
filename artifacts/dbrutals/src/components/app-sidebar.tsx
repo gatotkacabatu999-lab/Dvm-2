@@ -372,10 +372,12 @@ export function AppSidebar({
     </Sidebar>
 
       {/* Action dropdown backdrop */}
-      <div
-        className={`fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm transition-all duration-200 ${actionOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
-        onClick={() => setActionOpen(false)}
-      />
+      {actionOpen && (
+        <div
+          className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-sm animate-in fade-in-0 duration-150"
+          onClick={() => setActionOpen(false)}
+        />
+      )}
 
       {/* Unsaved Changes Dialog */}
       <Dialog open={unsavedDialogOpen} onOpenChange={setUnsavedDialogOpen}>
