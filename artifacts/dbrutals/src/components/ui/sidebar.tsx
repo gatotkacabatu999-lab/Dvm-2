@@ -188,15 +188,15 @@ function Sidebar({
           data-sidebar="sidebar"
           data-slot="sidebar"
           data-mobile="true"
-          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden"
+          className="bg-sidebar text-sidebar-foreground w-(--sidebar-width) p-0 [&>button]:hidden rounded-[18px] overflow-hidden border border-sidebar-border/60 shadow-[0_8px_32px_rgba(0,0,0,0.32),0_2px_8px_rgba(0,0,0,0.14)]"
           onOpenAutoFocus={e => e.preventDefault()}
           style={
             {
               "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
-              top: "env(safe-area-inset-top)",
-              bottom: "env(safe-area-inset-bottom)",
-              height:
-                "calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom))",
+              top: "calc(env(safe-area-inset-top) + 12px)",
+              bottom: "12px",
+              left: "12px",
+              height: "calc(100dvh - env(safe-area-inset-top) - 24px)",
             } as React.CSSProperties
           }
           side={side}
@@ -205,7 +205,7 @@ function Sidebar({
             <SheetTitle>Sidebar</SheetTitle>
             <SheetDescription>Displays the mobile sidebar.</SheetDescription>
           </SheetHeader>
-          <div className={cn("flex h-full w-full flex-col", innerClassName)} style={innerStyle}>{children}</div>
+          <div className={cn("flex h-full w-full flex-col overflow-hidden rounded-[18px]", innerClassName)} style={innerStyle}>{children}</div>
         </SheetContent>
       </Sheet>
     )
